@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect,useState } from "react";
 import "../../styles/Home.css";
 import SigOut from "../../context/SignOut";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { decodeToken } from "../../context/AuthContext";
 
 
@@ -13,7 +13,7 @@ interface setusers {
 }
 
 const HomePage: React.FC = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const data = decodeToken(); 
   const [setusers, setUser] = useState<setusers | null>(null); 
   const token = localStorage.getItem("token"); 
@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
     try {
       if (!token) {
         localStorage.removeItem("token");
-        // navigate("/");
+        navigate("/");
         console.log("No token found, redirecting...");
         return;
       }
@@ -37,7 +37,7 @@ const HomePage: React.FC = () => {
       console.log("User verified:", response.data);
     } catch (error) {
       localStorage.removeItem("token");
-      // navigate("/");
+      navigate("/");
       console.error("Error:", axios.isAxiosError(error) ? error.response?.data || error.message : error);
     }
   };
@@ -50,8 +50,7 @@ const HomePage: React.FC = () => {
       setUser(null);
     }
     verify();
-  }, [data, token, ]); //navigate
-
+  }, [data, token,navigate ]); 
   return (
     <div className="homepage">
       <nav className="navbar">
