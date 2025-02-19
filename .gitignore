@@ -22,7 +22,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+.test.tsx
 
 test-report.xml
 sonar-project.properties
