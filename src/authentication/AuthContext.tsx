@@ -11,7 +11,6 @@ interface DecodedToken {
 export const decodeToken = (): DecodedToken[] | null => {
   const token = localStorage.getItem("token");
   if (!token) return null; 
-
   try {
     const decoded: DecodedToken[] = JSON.parse(atob(token.split(".")[1])); 
     return Array.isArray(decoded) ? decoded : [decoded]; 

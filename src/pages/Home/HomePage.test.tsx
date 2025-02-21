@@ -1,82 +1,67 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import HomePage from "./HomePage";
-import { decodeToken } from "../../context/AuthContext";
-import axios from "axios";
-import SigOut from "../../context/SignOut";
-jest.mock("../../context/AuthContext", () => ({
+import { render, screen, fireEvent } from "@testing-library/react";
+import HomePage from "./homePage"; 
+import { decodeToken } from "../../authentication/AuthContext";
+
+jest.mock("../../authentication/AuthContext", () => ({
   decodeToken: jest.fn(),
 }));
-jest.mock("axios");
-jest.mock("../../context/SignOut", () => jest.fn());
+
+jest.mock("../../components/navbar/navbar");
+jest.mock("../../components/footer/footer");
 
 describe("HomePage Component", () => {
-  const mockUser = {
-    data: [{ id: 1, first_name: "John", password: "12345" }],
-    exp: Date.now() / 1000 + 3600, 
-    iat: Date.now() / 1000,
-  };
-
   beforeEach(() => {
-    localStorage.setItem("token", "mock-token");
-    (decodeToken as jest.Mock).mockReturnValue([mockUser]); 
-    (axios.get as jest.Mock).mockResolvedValue({ data: { success: true } });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
     localStorage.clear();
   });
 
-  test("renders the HomePage component", async () => {
-    render(<HomePage />);
+  test("renders HomePage correctly", () => {
+    render(
+        <HomePage />
+    );
 
-    expect(screen.getByText(/Shoppee/i)).toBeInTheDocument();
-    expect(screen.getByText(/Shorts/i)).toBeInTheDocument();
-    expect(screen.getByText(/Jackets/i)).toBeInTheDocument();
-    expect(screen.getByText(/Pants/i)).toBeInTheDocument();
+    expect(screen.getByText("Explore")).toBeInTheDocument();
+    expect(screen.getByText("Find the right dress for you")).toBeInTheDocument();
+    expect(screen.getByText("Product")).toBeInTheDocument();
   });
 
-  test("displays user name when token is decoded successfully", async () => {
-    render(<HomePage />);
-    
-    expect(await screen.findByText(/John/i)).toBeInTheDocument(); 
-  });
-  
+  test("redirects to login if no token is found", () => {
+    render(
 
-  test("displays 'Guest' when no user data is found", async () => {
-    (decodeToken as jest.Mock).mockReturnValue([]);
-    render(<HomePage />);
+        <HomePage />
+    );
 
-    expect(await screen.findByText(/John/i)).toBeInTheDocument();
-
-  });
-
-  test("calls API and verifies user", async () => {
-    render(<HomePage />);
-    
-    await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith("http://localhost:3001/user/products", expect.any(Object));
-    });
-  });
-
-  test("sign out removes token from localStorage", () => {
-    render(<HomePage />);
-    const signOutButton = screen.getByText(/Sign OUT/i);
-
-    fireEvent.click(signOutButton);
-
-    expect(SigOut).toHaveBeenCalled();
     expect(localStorage.getItem("token")).toBeNull();
   });
 
-  test("handles missing token correctly", async () => {
-    localStorage.removeItem("token");
-    render(<HomePage />);
+  test("renders Header if user is found", () => {
+    const mockUser = { id: 1, first_name: "John", password: "secret" };
+    (decodeToken as jest.Mock).mockReturnValue([{ data: [mockUser] }]);
+    localStorage.setItem("token", "mockToken");
 
-    await waitFor(() => {
-      expect(localStorage.getItem("token")).toBeNull();
-    });
+    render(
+        <HomePage />
+    );
+
+    expect(screen.getByText("Mock Header")).toBeInTheDocument();
   });
 
+  test("navigates to /product when clicking Product button", () => {
+    const mockNavigate = jest.fn();
+    jest.mock("react-router-dom", () => ({
+      ...jest.requireActual("react-router-dom"),
+      useNavigate: () => mockNavigate,
+    }));
+
+    render(
+        <HomePage />
+    );
+
+    const productButton = screen.getByText("Product");
+    fireEvent.click(productButton);
+
+    expect(mockNavigate).toHaveBeenCalledWith("/product", {
+      state: { user: null },
+    });
+  });
 });

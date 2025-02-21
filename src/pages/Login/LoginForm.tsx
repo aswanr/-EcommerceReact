@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../../styles/Login.css";
-
-
+import "../../styles/login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate=useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -16,6 +16,7 @@ function Login() {
         if (res.status === 200) {
           setLoginError("User Founded");
           console.log("Login successful");
+          navigate('/home')
           if (res.data.token) {
             localStorage.setItem("token", res.data.token);
           } else {
@@ -36,6 +37,7 @@ function Login() {
   }
 
   return (
+    <div className="first-condainer">
     <div className="Main-condainer">
       <h1>Login</h1>
       <div className="condainer-1">
@@ -53,9 +55,9 @@ function Login() {
           />
           <button type="submit">Login</button>
           {loginError && <h1>{loginError}</h1>}
-
         </form>
       </div>
+    </div>
     </div>
   );
 }
