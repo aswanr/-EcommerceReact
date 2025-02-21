@@ -1,0 +1,9 @@
+.cart-container1{
+    position: relative;
+    top: 15px;
+    display: flex;
+    gap: 15px;
+}
+.count-value{
+padding: 25px;
+}
