@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* width: 1500px; */
     padding: 15px 40px;
     background: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -53,17 +52,6 @@
     background: #FFA500;
     color: black;
   }
-
-  .hero {
-    position: relative;
-    height: 500px;
-    background: url("https://source.unsplash.com/1600x900/?car") center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-  }
   
   .overlay {
     position: absolute;
@@ -72,9 +60,75 @@
     background: rgba(0, 0, 0, 0.4);
   }
   
+  .hero {
+    position: relative;
+    height: 700px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+  }
+
+  .slideshow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: fade 12s infinite;
+  }
+
+  .slide1 {
+    background-image: url('../components/assets/pexels-solliefoto-298863.jpg');
+    animation-delay: 0s;
+  }
+  .slide2 {
+    background-image: url('../components/assets/pexels-chetanvlad-1766702.jpg');
+    animation-delay: 4s;
+  }
+  .slide3 {
+    background-image: url('../components/assets/matthew-moloney-YeGao3uk8kI-unsplash.jpg');
+    animation-delay: 8s;
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 1;
+    }
+    60% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
   .hero-content {
     position: relative;
     z-index: 2;
+    text-align: center;
+    color: white;
   }
   
   .hero-content h1 {
@@ -86,10 +140,9 @@
     font-size: 18px;
     margin-bottom: 20px;
   }
-
   .hero-buttons {
     display: flex;
-    gap: 15px;
+    justify-content: center;
   }
   
   .btn-yellow {

@@ -1,88 +1,79 @@
-import axios from "axios";
-import React, { useEffect,useState } from "react";
-import "../../styles/Home.css";
-import SigOut from "../../context/SignOut";
-// import { useNavigate } from "react-router-dom";
-import { decodeToken } from "../../context/AuthContext";
+import React, { useEffect, useState, useCallback } from "react";
+import "../../styles/home.css";
+import { useNavigate } from "react-router-dom";
+import { decodeToken } from "../../authentication/AuthContext";
+import Header from "../../components/navbar/navbar";
+import Footer from "../../components/footer/footer";
 
-
-interface setusers {
+interface SetUsers {
   id: number;
   first_name: string;
-  password: string; 
+  password: string;
 }
 
 const HomePage: React.FC = () => {
-  // const navigate = useNavigate();
-  const data = decodeToken(); 
-  const [setusers, setUser] = useState<setusers | null>(null); 
-  const token = localStorage.getItem("token"); 
-  const verify = async (): Promise<void> => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<SetUsers | null>(null);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
+
+  const verify = useCallback(async () => {
     try {
       if (!token) {
-        localStorage.removeItem("token");
-        // navigate("/");
+        localStorage.get("token");
+        navigate("/");
         console.log("No token found, redirecting...");
-        return;
+      } else {
+        console.log("Login successfully");
       }
-
-      const response = await axios.get("http://localhost:3001/user/products", {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
-
-      console.log("User verified:", response.data);
     } catch (error) {
       localStorage.removeItem("token");
-      // navigate("/");
-      console.error("Error:", axios.isAxiosError(error) ? error.response?.data || error.message : error);
+      navigate("/");
     }
-  };
+  }, [token,navigate]);
 
   useEffect(() => {
-    if (Array.isArray(data) && data.length > 0) {
-      const user = data[0].data[0];
-      setUser(user); 
-    } else {
-      setUser(null);
+    const initToken = localStorage.getItem("token");
+    setToken(initToken);
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      const data = decodeToken();
+      if (Array.isArray(data) && data.length > 0) {
+        const user = data[0].data[0];
+        setUser(user);
+        verify();
+      }
     }
-    verify();
-  }, [data, token, ]); //navigate
+  }, [token, verify]);
+
+  const goToAnotherPage = () => {
+    navigate("/product", { state: { user } });
+  };
 
   return (
     <div className="homepage">
-      <nav className="navbar">
-        <div className="logo">Shoppee</div>
-        <ul className="nav-links">
-        <li>{setusers?.first_name ?? "Guest"}</li>
-          <li>Shorts</li>
-          <li>Jackets</li>
-          <li>Pants</li>
-        </ul>
-        <div className="nav-buttons">
-          <button
-            className="btn btn-signin"
-            onClick={(SigOut)}
-          >
-            Sign OUT
-          </button>
-          <button className="btn btn-saved">Carts(0)</button>
-        </div>
-      </nav>
+      {user && <Header setusers={user} />}
       <div className="hero">
+        <div className="slideshow">
+          <div className="slide slide1"></div>
+          <div className="slide slide2"></div>
+          <div className="slide slide3"></div>
+        </div>
         <div className="overlay"></div>
         <div className="hero-content">
           <h1>Explore</h1>
           <p>Find the right dress for you</p>
           <div className="hero-buttons">
-            <button className="btn btn-yellow">Product</button>
-            <button className="btn btn-orange">Sell your items</button>
+            <button className="btn btn-yellow" onClick={goToAnotherPage}>
+              Product
+            </button>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

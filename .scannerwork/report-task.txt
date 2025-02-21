@@ -1,6 +1,6 @@
-projectKey=New_react
+projectKey=React-5
 serverUrl=http://localhost:9000
 serverVersion=10.7.0.96327
-dashboardUrl=http://localhost:9000/dashboard?id=New_react
-ceTaskId=994cdb12-9a46-42b9-a13a-cac70935bf6f
-ceTaskUrl=http://localhost:9000/api/ce/task?id=994cdb12-9a46-42b9-a13a-cac70935bf6f
+dashboardUrl=http://localhost:9000/dashboard?id=React-5
+ceTaskId=2dbb87ef-299e-430a-a682-f47c77d44d5a
+ceTaskUrl=http://localhost:9000/api/ce/task?id=2dbb87ef-299e-430a-a682-f47c77d44d5a
