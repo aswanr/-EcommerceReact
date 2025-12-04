@@ -1,7 +1,7 @@
 import "./App.css";
-import Login from "./pages/login/loginForm";
-import SignUp from "./pages/signup/signupForm";
-import HomePage from "./pages/home/homePage";
+import Login from "./pages/Login/LoginForm";
+import SignUp from "./pages/Signup/SignupForm";
+import HomePage from "./pages/Home/HomePage";
 import SingleProduct from "./pages/productbyid/ProductbyId";
 import Product from "./pages/products/products";
 import SignOut from "./pages/signout/signout";

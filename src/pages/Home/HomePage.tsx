@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import "../../styles/home.css";
+import "../../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "../../authentication/AuthContext";
 import Header from "../../components/navbar/navbar";
